@@ -22,6 +22,7 @@ window.onerror = function (_msg, _url, _num, _col) {
 		res.msg = _msg;
 		res.script = _url;
 	} else if (typeof arguments[0] === "object") {
+		extra += "!!argument is object!!";
 		tmpTarget = (arguments[0].target || arguments[0].srcElement);
 		if (tmpTarget && (tmpTarget instanceof HTMLScriptElement || tmpTarget.constructor.name === 'HTMLScriptElement')) {
 			res.script = tmpTarget.src;
