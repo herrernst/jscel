@@ -1,6 +1,10 @@
 <?php
+//config
 $logfilename = "jscel.csv";
 $ajaxRefUrl = "http://www.example.com/";
+date_default_timezone_set('Europe/Vienna');
+//config end
+
 if ($_SERVER['REQUEST_METHOD'] === "GET") {
   $err = array(date("r"), $_SERVER['HTTP_REFERER'], $_SERVER['HTTP_USER_AGENT'], $_GET["script"], $_GET["msg"], $_GET["num"], $_GET["ref"], $_GET["timestamp"], $_GET["extra"]);
 } else if ($_SERVER['REQUEST_METHOD'] === "POST") {
