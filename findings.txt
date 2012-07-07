@@ -1,3 +1,6 @@
 <html onerror=... and <body onerror=... doesn't do anything (Chrome 20, Nokia E51)
 yes: ie6, iemobile on win mobil 6.5, opera mobile
-no: opera mini
+no: opera mini, nokia e51
+seems not to be supported on older webkit versions
+
+https://bugs.webkit.org/show_bug.cgi?id=8519

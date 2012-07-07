@@ -1,23 +1,30 @@
 window.onerror = function (_msg, _url, _num, _col) {
-	var msg, num, col, ref, script, extra = "", query = "", m, tmpTarget, scriptsToIgnore = ["http://google.com/plus2.js"];
+	var res = {}, extra = '', query = '', m, tmpTarget, 
+		/* don't report errors from scripts from the following urls */
+		scriptsToIgnore = ['http://connect.facebook.net/en_US/all.js'],
+		/* url to report to, has to be on same domain */
+		serverURL = 'jscel.php',
+		/* only report if included in current location */
+		reportingSite = '://localhost/';
 
-	/* if we are not on live system, return immediately */
-	if (window.location.href.indexOf("://localhost/") === -1) {
-//		return false;
+	/* if we are not on targeted site, return immediately */
+	if (window.location.href.indexOf('') === -1) {
+		return false;
 	}
 	/* don't report errors that have no useful info
-           this may be the case if not same origin according to http://dev.w3.org/html5/spec/webappapis.html#report-the-error  */
+        this may be the case if not same origin according to http://dev.w3.org/html5/spec/webappapis.html#report-the-error 
+ 		or in an extension*/
 	if (_msg === "Script error." && !_url && !_num) {
 		return false;
 	}
-	/* different browsers, different arguments */
+	/* most browsers provide three arguments, but some others return an object */
 	if (typeof _msg === "string") {
-		msg = _msg;
-		script = _url;
+		res.msg = _msg;
+		res.script = _url;
 	} else if (typeof arguments[0] === "object") {
 		tmpTarget = (arguments[0].target || arguments[0].srcElement);
 		if (tmpTarget && (tmpTarget instanceof HTMLScriptElement || tmpTarget.constructor.name === 'HTMLScriptElement')) {
-			script = tmpTarget.src;
+			res.script = tmpTarget.src;
 		} else {
 			extra += "[";
 			for (m in arguments[0]) {
@@ -26,7 +33,7 @@ window.onerror = function (_msg, _url, _num, _col) {
 			extra += "]";
 			if (arguments[0].constructur) extra += "|constructor: " + arguments[0].constructor;
 			if (tmpTarget && tmpTarget.src) {
-				script = tmpTarget.src;
+				res.script = tmpTarget.src;
 			}
 			if (tmpTarget.constructor) extra += "|target.constructor.name: " + tmpTarget.constructor.name;
 			if (tmpTarget && tmpTarget.prototype) extra += "|target.prototype: " + tmpTarget.prototype;
@@ -35,33 +42,35 @@ window.onerror = function (_msg, _url, _num, _col) {
 		}
 	}
 	for (var i = 0; i < scriptsToIgnore.length; i++) {
-		if (script.indexOf(scriptsToIgnore[i]) ===  0 ) {
+		if (res.script.indexOf(scriptsToIgnore[i]) ===  0 ) {
 			return false;
 		}
 	}
-	num = _num;
+	res.num = _num;
 	col = _col;
 	if (document.referrer) {
-		ref = document.referrer;
+		res.ref = document.referrer;
 	}
 	if (arguments && arguments.callee && arguments.callee.caller) {
 		if (arguments.callee.caller.name) {
 			extra += "|caller.name: " + arguments.callee.caller.name;
 		} else {
-			//Really? Logs complete source
+			//Do you really want to report complete source (IE)?
 			if (false) extra += "|caller: " + arguments.callee.caller;
 		}
 	}
-	if (msg) query +=  "&msg=" + encodeURIComponent(msg);
-	if (num) query +=  "&num=" + num;
-	if (col) extra +=  "|col: " + col;
-	if (ref) query +=  "&ref=" + encodeURIComponent(ref);
-	if (script) query +=  "&script=" + encodeURIComponent(script);
+	for (val in res) {
+		if (res[val]) {
+			query += val + "=" + encodeURIComponent(res[val]);
+		}
+	}
 	query += "&timestamp="+(new Date()).getTime();
+	if (col) extra +=  "|col: " + col;
 	if (extra) query +=  "&extra=" + encodeURIComponent(extra);
 	
-	(new Image).src = "/jscel/jscel.php?" + query;
-    return false; //if false, firebug also shows it; if true, not
+	(new Image).src = serverURL + "?" + query;
+	//false: browser also reports error; false: silence
+    return false;
 };
 
 1 * 3 * 4 + 4;
