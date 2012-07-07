@@ -4,8 +4,8 @@ window.onerror = function (_msg, _url, _num, _col) {
 		scriptsToIgnore = ['http://connect.facebook.net/en_US/all.js'],
 		/* url to report to, has to be on same domain */
 		serverURL = 'jscel.php',
-		/* only report if included in current location */
-		reportingSite = '://localhost/';
+		/* only report if included in current location, leave empty if don't care */
+		reportingSite = '';
 
 	/* if we are not on targeted site, return immediately */
 	if (window.location.href.indexOf(reportingSite) === -1) {
