@@ -1,11 +1,12 @@
-window.onerror = function (_msg, _url, _num) {
-	var msg, num, ref, script, extra = "", query = "", m, tmpTarget, scriptsToIgnore = ["http://google.com/plus2.js"];
+window.onerror = function (_msg, _url, _num, _col) {
+	var msg, num, col, ref, script, extra = "", query = "", m, tmpTarget, scriptsToIgnore = ["http://google.com/plus2.js"];
 
 	/* if we are not on live system, return immediately */
 	if (window.location.href.indexOf("://localhost/") === -1) {
 //		return false;
 	}
-	/* don't report errors that have no useful info */
+	/* don't report errors that have no useful info
+           this may be the case if not same origin according to http://dev.w3.org/html5/spec/webappapis.html#report-the-error  */
 	if (_msg === "Script error." && !_url && !_num) {
 		return false;
 	}
@@ -38,9 +39,8 @@ window.onerror = function (_msg, _url, _num) {
 			return false;
 		}
 	}
-	if (typeof _num === "number") {
-		num = _num;
-	}
+	num = _num;
+	col = _col;
 	if (document.referrer) {
 		ref = document.referrer;
 	}
@@ -54,6 +54,7 @@ window.onerror = function (_msg, _url, _num) {
 	}
 	if (msg) query +=  "&msg=" + encodeURIComponent(msg);
 	if (num) query +=  "&num=" + num;
+	if (col) extra +=  "|col: " + col;
 	if (ref) query +=  "&ref=" + encodeURIComponent(ref);
 	if (script) query +=  "&script=" + encodeURIComponent(script);
 	query += "&timestamp="+(new Date()).getTime();
