@@ -48,19 +48,20 @@ window.onerror = function (_msg, _url, _num) {
 		if (arguments.callee.caller.name) {
 			extra += "|caller.name: " + arguments.callee.caller.name;
 		} else {
-			extra += "|caller: " + arguments.callee.caller;
+			//Really? Logs complete source
+			if (false) extra += "|caller: " + arguments.callee.caller;
 		}
 	}
-	if (msg) query +=  "&msg=" + encodeURI(msg);
+	if (msg) query +=  "&msg=" + encodeURIComponent(msg);
 	if (num) query +=  "&num=" + num;
-	if (ref) query +=  "&ref=" + encodeURI(ref);
-	if (script) query +=  "&script=" + encodeURI(script);
+	if (ref) query +=  "&ref=" + encodeURIComponent(ref);
+	if (script) query +=  "&script=" + encodeURIComponent(script);
 	query += "&timestamp="+(new Date()).getTime();
-	if (extra) query +=  "&extra=" + encodeURI(extra);
+	if (extra) query +=  "&extra=" + encodeURIComponent(extra);
 	
 	(new Image).src = "/jscel/jscel.php?" + query;
     return false; //if false, firebug also shows it; if true, not
 };
 
-
+1 * 3 * 4 + 4;
 triggerErrorInSameJsFileAfter

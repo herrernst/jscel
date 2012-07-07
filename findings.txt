@@ -1,0 +1,3 @@
+<html onerror=... and <body onerror=... doesn't do anything (Chrome 20, Nokia E51)
+yes: ie6, iemobile on win mobil 6.5, opera mobile
+no: opera mini
