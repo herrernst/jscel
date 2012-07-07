@@ -8,7 +8,7 @@ window.onerror = function (_msg, _url, _num, _col) {
 		reportingSite = '://localhost/';
 
 	/* if we are not on targeted site, return immediately */
-	if (window.location.href.indexOf('') === -1) {
+	if (window.location.href.indexOf(reportingSite) === -1) {
 		return false;
 	}
 	/* don't report errors that have no useful info
@@ -61,7 +61,7 @@ window.onerror = function (_msg, _url, _num, _col) {
 	}
 	for (val in res) {
 		if (res[val]) {
-			query += val + "=" + encodeURIComponent(res[val]);
+			query += "&" + val + "=" + encodeURIComponent(res[val]);
 		}
 	}
 	query += "&timestamp="+(new Date()).getTime();
