@@ -4,3 +4,6 @@ no: opera mini, nokia e51
 seems not to be supported on older webkit versions
 
 https://bugs.webkit.org/show_bug.cgi?id=8519
+
+onerror is called with object argument on:
+"Mozilla/5.0 (Linux; U; Android 2.2.1; de-at; GT-I9000 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
