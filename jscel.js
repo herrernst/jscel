@@ -1,0 +1,66 @@
+window.onerror = function (_msg, _url, _num) {
+	var msg, num, ref, script, extra = "", query = "", m, tmpTarget, scriptsToIgnore = ["http://google.com/plus2.js"];
+
+	/* if we are not on live system, return immediately */
+	if (window.location.href.indexOf("://localhost/") === -1) {
+//		return false;
+	}
+	/* don't report errors that have no useful info */
+	if (_msg === "Script error." && !_url && !_num) {
+		return false;
+	}
+	/* different browsers, different arguments */
+	if (typeof _msg === "string") {
+		msg = _msg;
+		script = _url;
+	} else if (typeof arguments[0] === "object") {
+		tmpTarget = (arguments[0].target || arguments[0].srcElement);
+		if (tmpTarget && (tmpTarget instanceof HTMLScriptElement || tmpTarget.constructor.name === 'HTMLScriptElement')) {
+			script = tmpTarget.src;
+		} else {
+			extra += "[";
+			for (m in arguments[0]) {
+				if (arguments[0].hasOwnProperty(m)) extra += m + ": " + arguments[0][m] + ", ";
+			}
+			extra += "]";
+			if (arguments[0].constructur) extra += "|constructor: " + arguments[0].constructor;
+			if (tmpTarget && tmpTarget.src) {
+				script = tmpTarget.src;
+			}
+			if (tmpTarget.constructor) extra += "|target.constructor.name: " + tmpTarget.constructor.name;
+			if (tmpTarget && tmpTarget.prototype) extra += "|target.prototype: " + tmpTarget.prototype;
+			if (tmpTarget && tmpTarget.__proto__) extra += "|target.__proto__: " + tmpTarget.__proto__;
+			if (tmpTarget && Object.getPrototypeOf(tmpTarget)) extra += "|getPrototypeOf: " + Object.getPrototypeOf(tmpTarget);
+		}
+	}
+	for (var i = 0; i < scriptsToIgnore.length; i++) {
+		if (script.indexOf(scriptsToIgnore[i]) ===  0 ) {
+			return false;
+		}
+	}
+	if (typeof _num === "number") {
+		num = _num;
+	}
+	if (document.referrer) {
+		ref = document.referrer;
+	}
+	if (arguments && arguments.callee && arguments.callee.caller) {
+		if (arguments.callee.caller.name) {
+			extra += "|caller.name: " + arguments.callee.caller.name;
+		} else {
+			extra += "|caller: " + arguments.callee.caller;
+		}
+	}
+	if (msg) query +=  "&msg=" + encodeURI(msg);
+	if (num) query +=  "&num=" + num;
+	if (ref) query +=  "&ref=" + encodeURI(ref);
+	if (script) query +=  "&script=" + encodeURI(script);
+	query += "&timestamp="+(new Date()).getTime();
+	if (extra) query +=  "&extra=" + encodeURI(extra);
+	
+	(new Image).src = "/jscel/jscel.php?" + query;
+    return false; //if false, firebug also shows it; if true, not
+};
+
+
+triggerErrorInSameJsFileAfter
