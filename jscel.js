@@ -70,7 +70,7 @@ window.onerror = function (_msg, _url, _num, _col) {
 	if (extra) query +=  "&extra=" + encodeURIComponent(extra);
 	
 	(new Image).src = serverURL + "?" + query;
-	//false: browser also reports error; false: silence
+	//false: browser also reports error; true: silence
     return false;
 };
 
